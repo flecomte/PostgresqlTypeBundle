@@ -1,5 +1,5 @@
 {
-    "name": "FLE/PostgresqlTypeBundle",
+    "name": "fle/postgresql-type-bundle",
     "description": "This bundle define postgresql types for doctrine",
     "keywords": ["postgresql","doctrine"],
     "type": "symfony-bundle",
