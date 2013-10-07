@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Types\Type;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class WmVpdjBundle extends Bundle
+class PostgresqlTypeBundle extends Bundle
 {
     public function boot ()
     {
