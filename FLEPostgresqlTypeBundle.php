@@ -1,6 +1,6 @@
 <?php
 
-namespace FLE\PostgresqlTypeBundle;
+namespace FLE\Bundle\PostgresqlTypeBundle;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Types\Type;
