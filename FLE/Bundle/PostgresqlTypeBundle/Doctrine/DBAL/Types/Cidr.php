@@ -1,5 +1,5 @@
 <?php
-namespace FLE\Doctrine\DBAL\Types;
+namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

@@ -1,0 +1,25 @@
+{
+    "name": "FLE/PostgresqlTypeBundle",
+    "description": "This bundle define postgresql types for doctrine",
+    "keywords": ["postgresql","doctrine"],
+    "type": "symfony-bundle",
+    "authors": [
+        {
+            "name": "Lecomte Fabrice",
+            "email": "rusk23@gmail.com"
+        }
+    ],
+    "require": {
+        "doctrine/dbal": "~2.0"
+    },
+    "autoload": {
+        "psr-0": { "FLE\\Bundle\\PostgresqlTypeBundle": "" }
+    },
+    "target-dir": "FLE/Bundle/PostgresqlTypeBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0"
+        }
+    },
+    "minimum-stability": "dev"
+}

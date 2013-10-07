@@ -1,5 +1,5 @@
 <?php
-namespace FLE\Doctrine\DBAL\Types;
+namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -40,7 +40,7 @@ class Box extends Type
                 'x2' => null,
                 'y2' => null
             );
-        } elseif (preg_match('`\((-?[0-9]+),(-?[0-9]+)\),\((-?[0-9]+),(-?[0-9]+)\)`', $value, $matches)) {
+        } elseif (preg_match('`\((-?[0-9.]+),(-?[0-9.]+)\),\((-?[0-9.]+),(-?[0-9.]+)\)`', $value, $matches)) {
             $reordered = array('x1' => $matches[3], 'y1' => $matches[4], 'x2' => $matches[1], 'y2' => $matches[2]);
 
             return $reordered;
