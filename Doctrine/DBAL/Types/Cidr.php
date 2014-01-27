@@ -20,7 +20,7 @@ class Cidr extends Type
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)
     {
-        if ($value === null) {
+        if ($value === null || $value == '') {
             return null;
         }
         return (string) $value;
