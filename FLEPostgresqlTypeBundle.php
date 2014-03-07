@@ -28,9 +28,14 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('BOX', 'box');
         }
 
-        if (!Type::hasType('pg_array')) {
-            Type::addType('pg_array', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArray');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('PG_ARRAY', 'pg_array');
+        if (!Type::hasType('text[]')) {
+            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_text', 'text[]');
+        }
+
+        if (!Type::hasType('integer[]')) {
+            Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayNumeric');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int4', 'integer[]');
         }
 
         if (!Type::hasType('time_tz')) {

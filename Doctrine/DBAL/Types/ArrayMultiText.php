@@ -4,18 +4,18 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class PgArray extends Type
+class ArrayMultiText extends Type
 {
-    const PG_ARRAY = 'pg_array';
+    const ARRAY_MULTI_TEXT = 'text[]';
 
     public function getName ()
     {
-        return self::PG_ARRAY;
+        return self::ARRAY_MULTI_TEXT;
     }
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('PG_ARRAY');
+        return $platform->getDoctrineTypeMapping('text[]');
     }
 
     private function array_to_pg_array(array $array)
