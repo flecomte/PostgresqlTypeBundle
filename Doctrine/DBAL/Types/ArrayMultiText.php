@@ -36,6 +36,9 @@ class ArrayMultiText extends Type
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)
     {
+        if ($value === null) {
+            return null;
+        }
         return $this->array_to_pg_array($value);
     }
 
@@ -51,6 +54,9 @@ class ArrayMultiText extends Type
 
     public function convertToPHPValue ($value, AbstractPlatform $platform)
     {
+        if ($value === null) {
+            return null;
+        }
         preg_match_all('`{(?P<key>[^{},]+), ?(?P<value>[^{},]+)}`', $value, $matches);
         $r = [];
         foreach ($matches['value'] as $i => $v) {
