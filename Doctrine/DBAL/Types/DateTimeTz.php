@@ -7,5 +7,5 @@ class DateTimeTz extends DateTimeTzType
 {
     use DateTimeTrait;
 
-    protected static $format = 'Y-m-d H:i:s.uP';
+    protected static $format = 'Y-m-d H:i:s.uO';
 }
