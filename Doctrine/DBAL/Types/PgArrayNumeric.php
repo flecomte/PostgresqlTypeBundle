@@ -1,10 +1,9 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class ArrayNumeric extends Type
+class PgArrayNumeric extends PgArrayAbstract
 {
     const ARRAY_NUMERIC = 'integer[]';
 
@@ -18,32 +17,21 @@ class ArrayNumeric extends Type
         return $platform->getDoctrineTypeMapping('integer[]');
     }
 
-    private function array_to_pg_array(array $array)
+    public function convertToDatabaseValue ($array, AbstractPlatform $platform)
     {
-        $values = [];
+        if ($array === null) {
+            return null;
+        }
+
+        $convertArray = [];
         foreach ($array as $value) {
             if (!is_numeric($value)) {
                 throw new \Exception('not numeric!');
             }
-            $values[] = $value;
+            $convertArray[] = $value;
         }
 
-        return '{'.implode(', ', $values).'}';
-    }
-
-    public function convertToDatabaseValue ($value, AbstractPlatform $platform)
-    {
-        return $this->array_to_pg_array($value);
-    }
-
-    private function is_int ($v)
-    {
-        return (string) (int) $v === (string) $v;
-    }
-
-    private function is_float ($v)
-    {
-        return (string) (float) $v === (float) $v;
+        return '{'.implode(', ', $convertArray).'}';
     }
 
     public function convertToPHPValue ($value, AbstractPlatform $platform)

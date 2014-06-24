@@ -4,7 +4,7 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class ArrayMultiText extends Type
+class PgArrayMultiText extends PgArrayAbstract
 {
     const ARRAY_MULTI_TEXT = 'text[]';
 
@@ -18,38 +18,22 @@ class ArrayMultiText extends Type
         return $platform->getDoctrineTypeMapping('text[]');
     }
 
-    private function array_to_pg_array(array $array)
+    public function convertToDatabaseValue ($array, AbstractPlatform $platform)
     {
+        if ($array === null) {
+            return null;
+        }
+
         $convertArray = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 throw new \Exception('multidimentional array!');
             }
-            $value = '"'.$value.'"';
-            $key = '"'.$key.'"';
 
-            $convertArray[] = '{'.$key.', '.$value.'}';
+            $convertArray[] = '{"'.$key.'", "'.$value.'"}';
         }
 
         return '{'.implode(', ', $convertArray).'}';
-    }
-
-    public function convertToDatabaseValue ($value, AbstractPlatform $platform)
-    {
-        if ($value === null) {
-            return null;
-        }
-        return $this->array_to_pg_array($value);
-    }
-
-    private function is_int ($v)
-    {
-        return (string) (int) $v === (string) $v;
-    }
-
-    private function is_float ($v)
-    {
-        return (string) (float) $v === (float) $v;
     }
 
     public function convertToPHPValue ($value, AbstractPlatform $platform)
