@@ -10,12 +10,12 @@ class FLEPostgresqlTypeBundle extends Bundle
 {
     public function boot ()
     {
-        $em = $this->container->get('doctrine.orm.default_entity_manager');
-        $this->defineType($em);
+        $this->defineType();
     }
 
-    public function defineType (EntityManager $em)
+    protected function defineType ()
     {
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
         $conn = $em->getConnection();
 
         if (!Type::hasType('cidr')) {
@@ -29,12 +29,12 @@ class FLEPostgresqlTypeBundle extends Bundle
         }
 
         if (!Type::hasType('text[]')) {
-            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayMultiText');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_text', 'text[]');
         }
 
         if (!Type::hasType('integer[]')) {
-            Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayNumeric');
+            Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayNumeric');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int4', 'integer[]');
         }
 
