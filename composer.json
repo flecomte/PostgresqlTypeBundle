@@ -3,6 +3,7 @@
     "description": "This bundle define postgresql types for doctrine",
     "keywords": ["postgresql","doctrine"],
     "type": "symfony-bundle",
+    "license" : "MIT",
     "authors": [
         {
             "name": "Lecomte Fabrice",
@@ -10,6 +11,7 @@
         }
     ],
     "require": {
+        "php": ">=5.4",
         "doctrine/dbal": "~2.0"
     },
     "autoload": {
