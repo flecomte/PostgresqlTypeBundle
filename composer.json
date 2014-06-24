@@ -14,6 +14,9 @@
         "php": ">=5.4",
         "doctrine/dbal": "~2.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
     "autoload": {
         "psr-0": { "FLE\\Bundle\\PostgresqlTypeBundle": "" }
     },

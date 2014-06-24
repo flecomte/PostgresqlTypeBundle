@@ -20,19 +20,39 @@ class Box extends Type
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)
     {
-        if (is_array($value)) {
-            if ($value['x1'] === null && $value['y1'] === null && $value['x2'] === null && $value['y2'] === null) {
-                return null;
-            }
-
-            return $value['x1'].','.$value['y1'].','.$value['x2'].','.$value['y2'];
+        if ($value === null) {
+            return null;
         }
-
-        return $value;
+        if (is_array($value)) {
+            if (empty($value)) {
+                return null;
+            } elseif (count($value) == 4) {
+                if (isset($value['x1'])) {
+                    if ($value['x1'] === null && $value['y1'] === null && $value['x2'] === null && $value['y2'] === null) {
+                        return null;
+                    } else {
+                        return '('.$value['x1'].','.$value['y1'].'),('.$value['x2'].','.$value['y2'].')';
+                    }
+                } else if (isset($value[0])) {
+                    if ($value[0] === null && $value[1] === null && $value[2] === null && $value[3] === null) {
+                        return null;
+                    } else {
+                        return '('.$value[0].','.$value[1].'),('.$value[2].','.$value[3].')';
+                    }
+                }
+            } else {
+                throw new \Exception('BoxType Error: wrong format');
+            }
+        } else {
+            throw new \Exception('BoxType Error: wrong format');
+        }
     }
 
     public function convertToPHPValue ($value, AbstractPlatform $platform)
     {
+        if ($value === null) {
+            return null;
+        }
         if ($value === null) {
             return array(
                 'x1' => null,
