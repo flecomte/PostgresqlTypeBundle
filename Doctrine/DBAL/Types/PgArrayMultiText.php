@@ -1,7 +1,6 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class PgArrayMultiText extends PgArrayAbstract
@@ -44,14 +43,14 @@ class PgArrayMultiText extends PgArrayAbstract
         preg_match_all('`{(?P<key>[^{},]+), ?(?P<value>[^{},]+)}`', $value, $matches);
         $r = [];
         foreach ($matches['value'] as $i => $v) {
-            if ($this->is_int($v)) {
+            if ($this->isInt($v)) {
                 $v = (int) $v;
-            } elseif ($this->is_float($v)) {
+            } elseif ($this->isFloat($v)) {
                 $v = (float) $v;
             } elseif (substr($v, -1) == '"' && substr($v, 0, 1) == '"') {
                 $v = substr($v, 1, -1);
             }
-            $r[$matches['key'][$i]] = $this->is_int($v) ? (int) $v : ($this->is_float($v) ? (float) $v : $v);
+            $r[$matches['key'][$i]] = $this->isInt($v) ? (int) $v : ($this->isFloat($v) ? (float) $v : $v);
         }
 
         return $r;

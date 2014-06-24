@@ -5,12 +5,12 @@ use Doctrine\DBAL\Types\Type;
 
 abstract class PgArrayAbstract extends Type
 {
-    protected function is_int ($v)
+    protected function isInt ($v)
     {
         return (string) (int) $v === (string) $v;
     }
 
-    protected function is_float ($v)
+    protected function isFloat ($v)
     {
         return (string) (float) $v === (float) $v;
     }

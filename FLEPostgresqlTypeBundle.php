@@ -2,7 +2,6 @@
 
 namespace FLE\Bundle\PostgresqlTypeBundle;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\Types\Type;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
