@@ -31,13 +31,15 @@ class Time extends Type
         }
         try {
             $val = \DateTime::createFromFormat('H:i:s', $value);
+            if ($val === false) {
+                throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s');
+            }
         } catch (\Exception $e) {
             $val = \DateTime::createFromFormat('H:i:s.u', $value);
             if (! $val) {
                 throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s.u');
             }
         }
-
         return $val;
     }
 }

@@ -21,7 +21,7 @@ class TimeTz extends Type
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)
     {
-        return ($value !== null) ? $value->format('H:i:s.uP') : null;
+        return ($value !== null) ? $value->format('H:i:s.uO') : null;
     }
 
     public function convertToPHPValue ($value, AbstractPlatform $platform)
@@ -30,11 +30,14 @@ class TimeTz extends Type
             return null;
         }
         try {
-            $val = \DateTime::createFromFormat('H:i:sP', $value);
+            $val = \DateTime::createFromFormat('H:i:sO', $value);
+            if ($val === false) {
+                throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s');
+            }
         } catch (\Exception $e) {
-            $val = \DateTime::createFromFormat('H:i:s.uP', $value);
+            $val = \DateTime::createFromFormat('H:i:s.uO', $value);
             if (! $val) {
-                throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s.uP');
+                throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s.uO');
             }
         }
 

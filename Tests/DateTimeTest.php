@@ -2,19 +2,19 @@
 namespace FLE\Bundle\PostgresqlTypeBundle\Tests;
 
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
-use Doctrine\DBAL\Types\DateTimeType;
+use FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTime;
 
 class DateTimeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DateTimeType
+     * @var DateTime
      */
     protected static $datetimeType;
 
     public static function setUpBeforeClass()
     {
-        DateTimeType::overrideType('datetime', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTime');
-        self::$datetimeType = DateTimeType::getType('datetime');
+        DateTime::overrideType('datetime', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTime');
+        self::$datetimeType = DateTime::getType('datetime');
     }
 
     public function testConvertToDatabaseValue()

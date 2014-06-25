@@ -2,7 +2,7 @@
 namespace FLE\Bundle\PostgresqlTypeBundle\Tests;
 
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
-use Doctrine\DBAL\Types\DateTimeTzType;
+use FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTimeTz;
 
 class DateTimeTzTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,8 +13,8 @@ class DateTimeTzTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        DateTimeTzType::overrideType('datetimetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTimeTz');
-        self::$datetimeType = DateTimeTzType::getType('datetimetz');
+        DateTimeTz::overrideType('datetimetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTimeTz');
+        self::$datetimeType = DateTimeTz::getType('datetimetz');
     }
 
     public function testConvertToDatabaseValue()
