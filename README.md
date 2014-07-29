@@ -5,9 +5,7 @@ PostgresqlTypeBundle
 
 [![Dependency Status](https://www.versioneye.com/user/projects/53d789183648f42b4800011f/badge.svg)](https://www.versioneye.com/user/projects/53d789183648f42b4800011f)
 
-[![Coverage Status](https://coveralls.io/repos/flecomte/PostgresqlTypeBundle/badge.png)](https://coveralls.io/r/flecomte/PostgresqlTypeBundle)
-
-[![Codeship Status for flecomte/PostgresqlTypeBundle](https://www.codeship.io/projects/1a24fce0-f947-0131-b886-26b5a351acb8/status)](https://www.codeship.io/projects/28839)
+[![Coverage Status](https://coveralls.io/repos/flecomte/PostgresqlTypeBundle/badge.png?branch=dev)](https://coveralls.io/r/flecomte/PostgresqlTypeBundle?branch=dev)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/74bd7d10-8f45-4cd5-bcdb-5e537d097d89/small.png)](https://insight.sensiolabs.com/projects/74bd7d10-8f45-4cd5-bcdb-5e537d097d89)
 
