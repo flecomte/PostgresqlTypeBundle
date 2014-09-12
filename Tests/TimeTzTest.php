@@ -56,4 +56,10 @@ class TimeTzTest extends \PHPUnit_Framework_TestCase
         $sqlTime = self::$timeType->convertToPHPValue(null, new PostgreSqlPlatform());
         $this->assertNull($sqlTime, 'PHP convertion is not correct');
     }
+
+    public function testGetName()
+    {
+        $name = self::$timeType->getName();
+        $this->assertRegExp('`^[a-zA-Z_]+$`', $name, 'PHP convertion is not correct');
+    }
 }
