@@ -12,6 +12,6 @@ abstract class PgArrayAbstract extends Type
 
     protected function isFloat ($v)
     {
-        return (string) (float) $v === (float) $v;
+        return (string) (float) $v === (string) $v;
     }
 }

@@ -14,7 +14,7 @@ class PgArrayMultiText extends PgArrayAbstract
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('text[]');
+        return $platform->getDoctrineTypeMapping('_text');
     }
 
     public function convertToDatabaseValue ($array, AbstractPlatform $platform)
@@ -50,7 +50,7 @@ class PgArrayMultiText extends PgArrayAbstract
             } elseif (substr($v, -1) == '"' && substr($v, 0, 1) == '"') {
                 $v = substr($v, 1, -1);
             }
-            $r[$matches['key'][$i]] = $this->isInt($v) ? (int) $v : ($this->isFloat($v) ? (float) $v : $v);
+            $r[$matches['key'][$i]] = $v;
         }
 
         return $r;

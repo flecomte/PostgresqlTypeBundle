@@ -14,14 +14,10 @@ trait DateTimeTrait
             return $value->format(self::$format);
         } elseif (is_string($value)) {
             try {
-                return parent::convertToDatabaseValue($value, $platform);
+                $dt = new \DateTime($value);
+                return $dt->format(self::$format);
             } catch (\Exception $e) {
-                try {
-                    $dt = new \DateTime($value);
-                    return $dt->format(self::$format);
-                } catch (\Exception $e) {
-                    throw new \Exception('Date "'.$value.'" is not a valid date');
-                }
+                throw new \Exception('Date "'.$value.'" is not a valid date');
             }
         }
 

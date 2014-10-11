@@ -14,7 +14,7 @@ class PgArrayNumeric extends PgArrayAbstract
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('integer[]');
+        return $platform->getDoctrineTypeMapping('_int');
     }
 
     public function convertToDatabaseValue ($array, AbstractPlatform $platform)
@@ -40,7 +40,7 @@ class PgArrayNumeric extends PgArrayAbstract
             return null;
         }
 
-        preg_match_all('`(?P<value>[0-9]+)`', $value, $matches);
+        preg_match_all('`(?P<value>[0-9\.]+)`', $value, $matches);
         $r = [];
         foreach ($matches['value'] as $i => $v) {
             if ($this->isInt($v)) {
@@ -48,7 +48,7 @@ class PgArrayNumeric extends PgArrayAbstract
             } elseif ($this->isFloat($v)) {
                 $v = (float) $v;
             }
-            $r[] = $this->isInt($v) ? (int) $v : ($this->isFloat($v) ? (float) $v : $v);
+            $r[] = $v;
         }
 
         return $r;

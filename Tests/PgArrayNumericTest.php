@@ -11,46 +11,71 @@ class PgArrayNumericTest extends \PHPUnit_Framework_TestCase
      */
     protected static $pgArrayNumericType;
 
+    /**
+     * @var PostgreSqlPlatform
+     */
+    protected static $platform;
+
     public static function setUpBeforeClass()
     {
         PgArrayNumeric::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayNumeric');
         self::$pgArrayNumericType = PgArrayNumeric::getType('integer[]');
+        self::$platform = new PostgreSqlPlatform();
+        self::$platform->registerDoctrineTypeMapping('_int', 'integer[]');
     }
 
     public function testConvertToDatabaseValue()
     {
         $platform = new PostgreSqlPlatform();
-        $array = array(1, 2, 3, 4, 5, 999);
+        $array = array(1, 2, 3, 4, 5.5, 999);
 
-        $sqlArray = self::$pgArrayNumericType->convertToDatabaseValue($array, $platform);
+        $sqlArray = self::$pgArrayNumericType->convertToDatabaseValue($array, self::$platform);
 
-        $this->assertEquals('{1, 2, 3, 4, 5, 999}', $sqlArray, 'SQL convertion is not correct');
+        $this->assertEquals('{1, 2, 3, 4, 5.5, 999}', $sqlArray, 'SQL convertion is not correct');
     }
 
     public function testConvertToDatabaseValueIsNull()
     {
-        $platform = new PostgreSqlPlatform();
         $array = null;
 
-        $sqlArray = self::$pgArrayNumericType->convertToDatabaseValue($array, $platform);
+        $sqlArray = self::$pgArrayNumericType->convertToDatabaseValue($array, self::$platform);
 
         $this->assertNull($sqlArray, 'SQL convertion is not correct');
     }
 
+    public function testConvertToDatabaseValueException()
+    {
+        $this->setExpectedException(
+            'Exception', 'not numeric!'
+        );
+
+        $array = array('plip', 'plop');
+
+        $sqlArray = self::$pgArrayNumericType->convertToDatabaseValue($array, self::$platform);
+    }
+
     public function testConvertToPHPValue()
     {
-        $platform = new PostgreSqlPlatform();
-        $array = array(1, 2, 3, 4, 5, 999);
+        $array = array(1, 2, 3, 4, 5.5, 999);
 
-        $phpArray = self::$pgArrayNumericType->convertToPHPValue('{1, 2, 3, 4, 5, 999}', $platform);
+        $phpArray = self::$pgArrayNumericType->convertToPHPValue('{1, 2, 3, 4, 5.5, 999}', self::$platform);
         $this->assertEquals($array, $phpArray, 'PHP convertion is not correct');
     }
 
     public function testConvertToPHPValueIsNull()
     {
-        $platform = new PostgreSqlPlatform();
-
-        $phpArray = self::$pgArrayNumericType->convertToPHPValue(null, $platform);
+        $phpArray = self::$pgArrayNumericType->convertToPHPValue(null, self::$platform);
         $this->assertNull($phpArray, 'PHP convertion is not correct');
+    }
+
+    public function testGetName()
+    {
+        $this->assertEquals('integer[]', self::$pgArrayNumericType->getName(), 'SQL name is not correct');
+    }
+
+    public function testGetSQLDeclaration()
+    {
+        $array = array(1, 2, 3, 4, 5.5, 999);
+        $this->assertEquals('integer[]', self::$pgArrayNumericType->getSQLDeclaration($array, self::$platform), 'SQL declaration is not correct');
     }
 }

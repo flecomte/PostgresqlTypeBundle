@@ -4,6 +4,7 @@ namespace FLE\Bundle\PostgresqlTypeBundle;
 
 use Doctrine\DBAL\Types\Type;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Doctrine\ORM\EntityManager;
 
 class FLEPostgresqlTypeBundle extends Bundle
 {
@@ -14,7 +15,7 @@ class FLEPostgresqlTypeBundle extends Bundle
 
     protected function defineType ()
     {
-        $em = $this->container->get('doctrine.orm.default_entity_manager');
+        $em = $this->container->get('doctrine.orm.default_entity_manager'); $em instanceof EntityManager;
         $conn = $em->getConnection();
 
         if (!Type::hasType('cidr')) {
@@ -34,7 +35,7 @@ class FLEPostgresqlTypeBundle extends Bundle
 
         if (!Type::hasType('integer[]')) {
             Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayNumeric');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int4', 'integer[]');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int', 'integer[]');
         }
 
         if (!Type::hasType('time_tz')) {

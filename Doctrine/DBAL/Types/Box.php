@@ -53,14 +53,7 @@ class Box extends Type
         if ($value === null) {
             return null;
         }
-        if ($value === null) {
-            return array(
-                'x1' => null,
-                'y1' => null,
-                'x2' => null,
-                'y2' => null
-            );
-        } elseif (preg_match('`\((-?[0-9.]+),(-?[0-9.]+)\),\((-?[0-9.]+),(-?[0-9.]+)\)`', $value, $matches)) {
+        if (preg_match('`\((-?[0-9.]+),(-?[0-9.]+)\),\((-?[0-9.]+),(-?[0-9.]+)\)`', $value, $matches)) {
             $reordered = array('x1' => $matches[3], 'y1' => $matches[4], 'x2' => $matches[1], 'y2' => $matches[2]);
 
             return $reordered;
