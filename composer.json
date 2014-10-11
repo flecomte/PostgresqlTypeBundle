@@ -7,7 +7,8 @@
     "authors": [
         {
             "name": "Lecomte Fabrice",
-            "email": "rusk23@gmail.com"
+            "email": "rusk23@gmail.com",
+            "role" : "Developer"
         }
     ],
     "require": {
