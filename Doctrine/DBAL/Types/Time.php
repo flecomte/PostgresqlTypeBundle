@@ -16,7 +16,7 @@ class Time extends Type
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('TIME');
+        return $platform->getDoctrineTypeMapping('time');
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)

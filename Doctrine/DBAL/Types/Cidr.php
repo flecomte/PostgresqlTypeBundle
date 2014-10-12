@@ -15,7 +15,7 @@ class Cidr extends Type
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('CIDR');
+        return $platform->getDoctrineTypeMapping('cidr');
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)

@@ -11,17 +11,24 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
      */
     protected static $datetimeType;
 
+    /**
+     * @var PostgreSqlPlatform
+     */
+    protected static $platform;
+
     public static function setUpBeforeClass()
     {
         DateTime::overrideType('datetime', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTime');
         self::$datetimeType = DateTime::getType('datetime');
+        self::$platform = new PostgreSqlPlatform();
+        self::$platform->registerDoctrineTypeMapping('datetime', 'datetime');
     }
 
     public function testConvertToDatabaseValue()
     {
         $datetime = new \DateTime('2005-08-15T15:52:01');
 
-        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, self::$platform);
 
         $this->assertEquals('2005-08-15 15:52:01.000000', $sqlDateTime, 'SQL convertion is not correct');
     }
@@ -30,7 +37,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
     {
         $datetime = null;
 
-        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, self::$platform);
 
         $this->assertNull($sqlDateTime, 'SQL convertion is not correct');
     }
@@ -39,7 +46,7 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
     {
         $datetime = '2005-08-15T15:52:01';
 
-        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, self::$platform);
 
         $this->assertEquals('2005-08-15 15:52:01.000000', $sqlDateTime, 'SQL convertion is not correct');
     }
@@ -52,20 +59,20 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
             'Exception', 'Date "'.$datetime.'" is not a valid date'
         );
 
-        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToDatabaseValue($datetime, self::$platform);
     }
 
     public function testConvertToPHPValue()
     {
         $datetime = new \DateTime('2005-08-15T15:52:01');
 
-        $sqlDateTime = self::$datetimeType->convertToPHPValue('2005-08-15 15:52:01.000000', new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToPHPValue('2005-08-15 15:52:01.000000', self::$platform);
         $this->assertEquals($datetime, $sqlDateTime, 'PHP convertion is not correct');
     }
 
     public function testConvertToPHPValueIsNull()
     {
-        $sqlDateTime = self::$datetimeType->convertToPHPValue(null, new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToPHPValue(null, self::$platform);
         $this->assertNull($sqlDateTime, 'PHP convertion is not correct');
     }
 
@@ -75,7 +82,17 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException(
             'Exception', "Could not convert database value \"$value\" to Doctrine Type datetime. Expected format: Y-m-d H:i:s.u"
         );
-        $sqlDateTime = self::$datetimeType->convertToPHPValue($value, new PostgreSqlPlatform());
+        $sqlDateTime = self::$datetimeType->convertToPHPValue($value, self::$platform);
         $this->assertNull($sqlDateTime, 'PHP convertion is not correct');
+    }
+
+    public function testGetName()
+    {
+        $this->assertEquals('datetime', self::$datetimeType->getName(), 'SQL name is not correct');
+    }
+
+    public function testGetSQLDeclaration()
+    {
+        $this->assertEquals('TIMESTAMP(0) WITHOUT TIME ZONE', self::$datetimeType->getSQLDeclaration([], self::$platform), 'SQL declaration is not correct');
     }
 }

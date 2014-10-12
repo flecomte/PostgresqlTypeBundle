@@ -75,7 +75,6 @@ class PgArrayMultiTextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSQLDeclaration()
     {
-        $array = array("first" => "Hello", "last" => "World");
-        $this->assertEquals('text[]', self::$pgArrayMultiTextType->getSQLDeclaration($array, self::$platform), 'SQL declaration is not correct');
+        $this->assertEquals('text[]', self::$pgArrayMultiTextType->getSQLDeclaration([], self::$platform), 'SQL declaration is not correct');
     }
 }

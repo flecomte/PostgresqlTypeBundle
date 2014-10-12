@@ -15,7 +15,7 @@ class Box extends Type
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('BOX');
+        return $platform->getDoctrineTypeMapping('box');
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)

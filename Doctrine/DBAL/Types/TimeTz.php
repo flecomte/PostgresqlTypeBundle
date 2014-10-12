@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\ConversionException;
 
 class TimeTz extends Type
 {
-    const TIME_TZ = 'time_tz';
+    const TIME_TZ = 'timetz';
 
     public function getName()
     {
@@ -16,7 +16,7 @@ class TimeTz extends Type
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('TIME_TZ');
+        return $platform->getDoctrineTypeMapping('timetz');
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)

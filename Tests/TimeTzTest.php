@@ -11,17 +11,24 @@ class TimeTzTest extends \PHPUnit_Framework_TestCase
      */
     protected static $timeType;
 
+    /**
+     * @var PostgreSqlPlatform
+     */
+    protected static $platform;
+
     public static function setUpBeforeClass()
     {
         TimeTz::addType('timetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\TimeTz');
         self::$timeType = TimeTz::getType('timetz');
+        self::$platform = new PostgreSqlPlatform();
+        self::$platform->registerDoctrineTypeMapping('timetz', 'timetz');
     }
 
     public function testConvertToDatabaseValue()
     {
         $datetime = \DateTime::createFromFormat('H:i:s.uP', '15:52:01.555555+05:30');
 
-        $sqlTime = self::$timeType->convertToDatabaseValue($datetime, new PostgreSqlPlatform());
+        $sqlTime = self::$timeType->convertToDatabaseValue($datetime, self::$platform);
 
         $this->assertEquals('15:52:01.555555+0530', $sqlTime, 'SQL convertion is not correct');
     }
@@ -30,7 +37,7 @@ class TimeTzTest extends \PHPUnit_Framework_TestCase
     {
         $datetime = null;
 
-        $sqlTime = self::$timeType->convertToDatabaseValue($datetime, new PostgreSqlPlatform());
+        $sqlTime = self::$timeType->convertToDatabaseValue($datetime, self::$platform);
 
         $this->assertNull($sqlTime, 'SQL convertion is not correct');
     }
@@ -39,7 +46,7 @@ class TimeTzTest extends \PHPUnit_Framework_TestCase
     {
         $datetime = \DateTime::createFromFormat('H:i:s.uP', '15:52:01.555555+05:30');
 
-        $sqlTime = self::$timeType->convertToPHPValue('15:52:01.555555+0530', new PostgreSqlPlatform());
+        $sqlTime = self::$timeType->convertToPHPValue('15:52:01.555555+0530', self::$platform);
         $this->assertEquals($datetime->format('HisuO'), $sqlTime->format('HisuO'), 'PHP convertion is not correct');
     }
 
@@ -47,19 +54,23 @@ class TimeTzTest extends \PHPUnit_Framework_TestCase
     {
         $datetime = \DateTime::createFromFormat('H:i:sP', '15:52:01+05:30');
 
-        $sqlTime = self::$timeType->convertToPHPValue('15:52:01.000000+05:30', new PostgreSqlPlatform());
+        $sqlTime = self::$timeType->convertToPHPValue('15:52:01.000000+05:30', self::$platform);
         $this->assertEquals($datetime->format('HisuO'), $sqlTime->format('HisuO'), 'PHP convertion is not correct');
     }
 
     public function testConvertToPHPValueIsNull()
     {
-        $sqlTime = self::$timeType->convertToPHPValue(null, new PostgreSqlPlatform());
+        $sqlTime = self::$timeType->convertToPHPValue(null, self::$platform);
         $this->assertNull($sqlTime, 'PHP convertion is not correct');
     }
 
     public function testGetName()
     {
-        $name = self::$timeType->getName();
-        $this->assertRegExp('`^[a-zA-Z_]+$`', $name, 'PHP convertion is not correct');
+        $this->assertEquals('timetz', self::$timeType->getName(), 'SQL name is not correct');
+    }
+
+    public function testGetSQLDeclaration()
+    {
+        $this->assertEquals('timetz', self::$timeType->getSQLDeclaration([], self::$platform), 'SQL declaration is not correct');
     }
 }

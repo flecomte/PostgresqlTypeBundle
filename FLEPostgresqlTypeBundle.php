@@ -20,12 +20,12 @@ class FLEPostgresqlTypeBundle extends Bundle
 
         if (!Type::hasType('cidr')) {
             Type::addType('cidr', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Cidr');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('CIDR', 'cidr');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('cidr', 'cidr');
         }
 
         if (!Type::hasType('box')) {
             Type::addType('box', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Box');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('BOX', 'box');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('box', 'box');
         }
 
         if (!Type::hasType('text[]')) {
@@ -38,18 +38,18 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int', 'integer[]');
         }
 
-        if (!Type::hasType('time_tz')) {
-            Type::addType('time_tz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\TimeTz');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('TIME_TZ', 'time_tz');
+        if (!Type::hasType('timetz')) {
+            Type::addType('timetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\TimeTz');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('timetz', 'timetz');
         }
 
         Type::overrideType('datetime', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTime');
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('DATETIME', 'datetime');
+        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('datetime', 'datetime');
 
         Type::overrideType('datetimetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTimeTz');
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('DATETIMETZ', 'datetimetz');
+        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('datetimetz', 'datetimetz');
 
         Type::overrideType('time', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Time');
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('TIME', 'time');
+        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('time', 'time');
     }
 }

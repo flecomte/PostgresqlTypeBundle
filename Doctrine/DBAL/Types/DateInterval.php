@@ -15,7 +15,7 @@ class DateInterval extends Type
 
     public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
     {
-        return $platform->getDoctrineTypeMapping('INTERVAL');
+        return $platform->getDoctrineTypeMapping('interval');
     }
 
     public function convertToDatabaseValue ($interval, AbstractPlatform $platform)
