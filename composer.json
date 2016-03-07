@@ -21,9 +21,8 @@
         "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
-        "psr-0": { "FLE\\Bundle\\PostgresqlTypeBundle": "" }
+        "psr-4": { "FLE\\Bundle\\PostgresqlTypeBundle\\": "" }
     },
-    "target-dir": "FLE/Bundle/PostgresqlTypeBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
