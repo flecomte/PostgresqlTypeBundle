@@ -1,15 +1,15 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Tests;
 
-use FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayMultiText;
+use FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 
-class PgArrayMultiTextTest extends \PHPUnit_Framework_TestCase
+class ArrayMultiTextTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var PgArrayMultiText
+     * @var ArrayMultiText
      */
-    protected static $pgArrayMultiTextType;
+    protected static $arrayMultiTextType;
 
     /**
      * @var PostgreSqlPlatform
@@ -18,17 +18,17 @@ class PgArrayMultiTextTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        PgArrayMultiText::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayMultiText');
-        self::$pgArrayMultiTextType = PgArrayMultiText::getType('text[]');
+        ArrayMultiText::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+        self::$arrayMultiTextType = ArrayMultiText::getType('text[]');
         self::$platform = new PostgreSqlPlatform();
-        self::$platform->registerDoctrineTypeMapping('_text', 'text[]');
+        self::$platform->registerDoctrineTypeMapping('text[]', 'text[]');
     }
 
     public function testConvertToDatabaseValue()
     {
         $array = array("first" => "Hello", "last" => "World");
 
-        $sqlArray = self::$pgArrayMultiTextType->convertToDatabaseValue($array, self::$platform);
+        $sqlArray = self::$arrayMultiTextType->convertToDatabaseValue($array, self::$platform);
 
         $this->assertEquals('{{"first", "Hello"}, {"last", "World"}}', $sqlArray, 'SQL convertion is not correct');
     }
@@ -41,14 +41,14 @@ class PgArrayMultiTextTest extends \PHPUnit_Framework_TestCase
 
         $array = array('plip' => ['tic' => 'tac'], 'plop');
 
-        $sqlArray = self::$pgArrayMultiTextType->convertToDatabaseValue($array, self::$platform);
+        $sqlArray = self::$arrayMultiTextType->convertToDatabaseValue($array, self::$platform);
     }
 
     public function testConvertToDatabaseValueIsNull()
     {
         $array = null;
 
-        $sqlArray = self::$pgArrayMultiTextType->convertToDatabaseValue($array, self::$platform);
+        $sqlArray = self::$arrayMultiTextType->convertToDatabaseValue($array, self::$platform);
 
         $this->assertNull($sqlArray, 'SQL convertion is not correct');
     }
@@ -57,24 +57,24 @@ class PgArrayMultiTextTest extends \PHPUnit_Framework_TestCase
     {
         $array = array("first" => 1, "second" => 156.256, "third" => 'Hello', "last" => "World");
 
-        $phpArray = self::$pgArrayMultiTextType->convertToPHPValue('{{first, 1}, {second, 156.256}, {third, "Hello"}, {last, World}}', self::$platform);
+        $phpArray = self::$arrayMultiTextType->convertToPHPValue('{{first, 1}, {second, 156.256}, {third, "Hello"}, {last, World}}', self::$platform);
         $this->assertEquals($array, $phpArray, 'PHP convertion is not correct');
 
     }
 
     public function testConvertToPHPValueIsNull()
     {
-        $phpArray = self::$pgArrayMultiTextType->convertToPHPValue(null, self::$platform);
+        $phpArray = self::$arrayMultiTextType->convertToPHPValue(null, self::$platform);
         $this->assertNull($phpArray, 'PHP convertion is not correct');
     }
 
     public function testGetName()
     {
-        $this->assertEquals('text[]', self::$pgArrayMultiTextType->getName(), 'SQL name is not correct');
+        $this->assertEquals('text[]', self::$arrayMultiTextType->getName(), 'SQL name is not correct');
     }
 
     public function testGetSQLDeclaration()
     {
-        $this->assertEquals('text[]', self::$pgArrayMultiTextType->getSQLDeclaration([], self::$platform), 'SQL declaration is not correct');
+        $this->assertEquals('text[]', self::$arrayMultiTextType->getSQLDeclaration([], self::$platform), 'SQL declaration is not correct');
     }
 }

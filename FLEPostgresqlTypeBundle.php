@@ -15,7 +15,8 @@ class FLEPostgresqlTypeBundle extends Bundle
 
     protected function defineType ()
     {
-        $em = $this->container->get('doctrine.orm.default_entity_manager'); $em instanceof EntityManager;
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.default_entity_manager');
         $conn = $em->getConnection();
 
         if (!Type::hasType('cidr')) {
@@ -29,13 +30,18 @@ class FLEPostgresqlTypeBundle extends Bundle
         }
 
         if (!Type::hasType('text[]')) {
-            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayMultiText');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_text', 'text[]');
+            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('text[]', 'text[]');
         }
 
         if (!Type::hasType('integer[]')) {
-            Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\PgArrayNumeric');
-            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int', 'integer[]');
+            Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayInt');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('integer[]', 'integer[]');
+        }
+
+        if (!Type::hasType('jsonb')) {
+            Type::addType('jsonb', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Jsonb');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('jsonb', 'jsonb');
         }
 
         if (!Type::hasType('timetz')) {

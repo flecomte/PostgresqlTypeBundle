@@ -1,21 +1,15 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class Box extends Type
+class Box extends AbstractType
 {
     const BOX = 'box';
 
     public function getName ()
     {
         return self::BOX;
-    }
-
-    public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDoctrineTypeMapping('box');
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)

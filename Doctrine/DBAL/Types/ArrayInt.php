@@ -3,18 +3,13 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class PgArrayNumeric extends PgArrayAbstract
+class ArrayInt extends ArrayAbstract
 {
-    const ARRAY_NUMERIC = 'integer[]';
+    const ARRAY_INTEGER = 'integer[]';
 
     public function getName ()
     {
-        return self::ARRAY_NUMERIC;
-    }
-
-    public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDoctrineTypeMapping('_int');
+        return self::ARRAY_INTEGER;
     }
 
     public function convertToDatabaseValue ($array, AbstractPlatform $platform)

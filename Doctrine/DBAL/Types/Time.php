@@ -1,22 +1,16 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 
-class Time extends Type
+class Time extends AbstractType
 {
     const TIME = 'time';
 
     public function getName()
     {
         return self::TIME;
-    }
-
-    public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDoctrineTypeMapping('time');
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)

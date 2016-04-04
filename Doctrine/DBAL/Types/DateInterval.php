@@ -2,20 +2,14 @@
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\Type;
 
-class DateInterval extends Type
+class DateInterval extends AbstractType
 {
     const INTERVAL = 'interval';
 
     public function getName()
     {
         return self::INTERVAL;
-    }
-
-    public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDoctrineTypeMapping('interval');
     }
 
     public function convertToDatabaseValue ($interval, AbstractPlatform $platform)

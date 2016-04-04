@@ -1,27 +1,27 @@
 {
     "name": "fle/postgresql-type-bundle",
-    "description": "This bundle define postgresql types for doctrine",
+    "description": "This bundle extend support of postgresql for doctrine",
     "keywords": ["postgresql","doctrine"],
     "type": "symfony-bundle",
     "license" : "MIT",
     "authors": [
         {
             "name": "Lecomte Fabrice",
-            "email": "rusk23@gmail.com",
-            "role" : "Developer"
+            "email": "rusk23@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.4",
         "doctrine/dbal": "~2.0",
-        "doctrine/orm": "~2.0"
+        "doctrine/orm": "~2.0",
+        "symfony/http-kernel": "~2.5"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
         "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
-        "psr-0": { "FLE\\Bundle\\PostgresqlTypeBundle": "" }
+        "psr-4": { "FLE\\Bundle\\PostgresqlTypeBundle\\": "" }
     },
     "target-dir": "FLE/Bundle/PostgresqlTypeBundle",
     "extra": {

@@ -3,18 +3,13 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class PgArrayMultiText extends PgArrayAbstract
+class ArrayMultiText extends ArrayAbstract
 {
     const ARRAY_MULTI_TEXT = 'text[]';
 
     public function getName ()
     {
         return self::ARRAY_MULTI_TEXT;
-    }
-
-    public function getSQLDeclaration (array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDoctrineTypeMapping('_text');
     }
 
     public function convertToDatabaseValue ($array, AbstractPlatform $platform)

@@ -3,28 +3,34 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class Cidr extends AbstractType
+class Jsonb extends AbstractType
 {
-    const CIDR = 'cidr';
+    const JSONB = 'jsonb';
 
     public function getName ()
     {
-        return self::CIDR;
+        return self::JSONB;
     }
 
     public function convertToDatabaseValue ($value, AbstractPlatform $platform)
     {
-        if ($value === null || $value === '') {
+        if ($value === null) {
             return null;
         }
-        return (string) $value;
+
+        $json = json_encode($value);
+        if ($json === false) {
+            throw new \Exception('Not valid json.');
+        }
+        return $json;
     }
 
     public function convertToPHPValue ($value, AbstractPlatform $platform)
     {
-        if ($value === '' || $value === null) {
+        if ($value === null) {
             return null;
         }
-        return (string) $value;
+
+        return json_decode($value, true);
     }
 }

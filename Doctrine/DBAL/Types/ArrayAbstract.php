@@ -1,9 +1,7 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Types\Type;
-
-abstract class PgArrayAbstract extends Type
+abstract class ArrayAbstract extends AbstractType
 {
     protected function isInt ($v)
     {
