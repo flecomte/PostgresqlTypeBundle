@@ -39,6 +39,11 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('integer[]', 'integer[]');
         }
 
+        if (!Type::hasType('_int4')) {
+            Type::addType('_int4', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayInt');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int4', '_int4');
+        }
+
         if (!Type::hasType('jsonb')) {
             Type::addType('jsonb', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Jsonb');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('jsonb', 'jsonb');
