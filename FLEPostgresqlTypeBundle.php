@@ -74,7 +74,7 @@ class FLEPostgresqlTypeBundle extends Bundle
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('time', 'time');
 
         if (!Type::hasType('interval')) {
-            Type::overrideType('interval', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateInterval');
+            Type::addType('interval', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateInterval');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('interval', 'interval');
         }
     }
