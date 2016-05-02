@@ -56,6 +56,8 @@ class DateInterval extends AbstractType
 
         if ($y !== null || $m !== null || $d !== null) {
             $p = $y.$m.$d;
+        } else {
+            $p = '';
         }
 
 
@@ -77,6 +79,8 @@ class DateInterval extends AbstractType
 
         if ($h !== null || $i !== null || $s !== null) {
             $t = 'T'.$h.$i.$s;
+        } else {
+            $t = '';
         }
         $di =  new \DateInterval("P$p$t");
 
