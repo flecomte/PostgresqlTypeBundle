@@ -44,6 +44,16 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int4', '_int4');
         }
 
+        if (!Type::hasType('bigint[]')) {
+            Type::addType('bigint[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayInt');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bigint[]', 'bigint[]');
+        }
+
+        if (!Type::hasType('_int8')) {
+            Type::addType('_int8', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayInt');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_int8', '_int8');
+        }
+
         if (!Type::hasType('jsonb')) {
             Type::addType('jsonb', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Jsonb');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('jsonb', 'jsonb');
@@ -62,5 +72,10 @@ class FLEPostgresqlTypeBundle extends Bundle
 
         Type::overrideType('time', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Time');
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('time', 'time');
+
+        if (!Type::hasType('interval')) {
+            Type::overrideType('interval', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateInterval');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('interval', 'interval');
+        }
     }
 }
