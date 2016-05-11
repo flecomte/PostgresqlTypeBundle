@@ -17,6 +17,9 @@ class ArrayInt extends ArrayAbstract
         if ($array === null) {
             return null;
         }
+        if (!is_array($array)) {
+            throw new \Exception('not array!');
+        }
 
         $convertArray = [];
         foreach ($array as $value) {
