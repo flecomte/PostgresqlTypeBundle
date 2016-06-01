@@ -34,6 +34,11 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('text[]', 'text[]');
         }
 
+        if (!Type::hasType('_text')) {
+            Type::addType('_text', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_text', '_text');
+        }
+
         if (!Type::hasType('integer[]')) {
             Type::addType('integer[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayInt');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('integer[]', 'integer[]');
