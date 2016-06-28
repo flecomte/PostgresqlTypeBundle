@@ -30,12 +30,12 @@ class FLEPostgresqlTypeBundle extends Bundle
         }
 
         if (!Type::hasType('text[]')) {
-            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('text[]', 'text[]');
         }
 
         if (!Type::hasType('_text')) {
-            Type::addType('_text', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+            Type::addType('_text', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_text', '_text');
         }
 

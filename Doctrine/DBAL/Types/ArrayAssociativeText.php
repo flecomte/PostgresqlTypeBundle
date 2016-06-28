@@ -3,13 +3,13 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class ArrayMultiText extends ArrayAbstract
+class ArrayAssociativeText extends ArrayAbstract
 {
-    const ARRAY_MULTI_TEXT = 'text[]';
+    const ARRAY_ASSOC_TEXT = 'text[]';
 
     public function getName ()
     {
-        return self::ARRAY_MULTI_TEXT;
+        return self::ARRAY_ASSOC_TEXT;
     }
 
     public function convertToDatabaseValue ($array, AbstractPlatform $platform)
@@ -21,7 +21,7 @@ class ArrayMultiText extends ArrayAbstract
         $convertArray = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                throw new \Exception('multidimentional array!');
+                throw new \Exception('This array can not contain more than 1 level deep');
             }
 
             $convertArray[] = '{"'.$key.'", "'.$value.'"}';

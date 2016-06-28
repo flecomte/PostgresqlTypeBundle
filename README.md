@@ -32,26 +32,22 @@ Installation
 
 Add the bunde to your `composer.json` file:
 
-```
+```json
 require: {
-    // ...
-    "fle/postgresql-type-bundle": "1.*@dev",
-    // ...
+    "fle/postgresql-type-bundle": "1.*@dev"
 }
 ```
 
 Then run a composer update:
 
-```shell
-composer.phar update
-# OR
+```bash
 composer.phar update fle/postgresql-type-bundle # to only update the bundle
 ```
 
-Register the bundle with your kernel:
+Register the bundle with your kernel in `AppKernel::registerBundles()`:
 
-```
-// in AppKernel::registerBundles()
+```php
+<?php
 $bundles = array(
     // ...
     new FLE\Bundle\PostgresqlTypeBundle\FLEPostgresqlTypeBundle(),
