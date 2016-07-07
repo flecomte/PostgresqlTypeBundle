@@ -29,13 +29,23 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('box', 'box');
         }
 
+        if (!Type::hasType('text[][]')) {
+            Type::addType('text[][]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('text[][]', 'text[][]');
+        }
+
+        if (!Type::hasType('__text')) {
+            Type::addType('__text', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('__text', '__text');
+        }
+
         if (!Type::hasType('text[]')) {
-            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
+            Type::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayText');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('text[]', 'text[]');
         }
 
         if (!Type::hasType('_text')) {
-            Type::addType('_text', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
+            Type::addType('_text', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayText');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_text', '_text');
         }
 
