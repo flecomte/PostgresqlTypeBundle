@@ -41,6 +41,6 @@ class ArrayText extends ArrayAbstract
         if ($value === '{}') {
             return [];
         }
-        return explode('","', mb_substr($value, 2, -2));
+        return explode(',', mb_substr($value, 1, -1));
     }
 }
