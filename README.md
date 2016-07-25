@@ -12,9 +12,10 @@ PostgresqlTypeBundle
 Overview
 --------
 
+### Supported Types
+
 Add support to postgresql type.
 
-### Supported Types:
 - Box
 - Cidr
 - DateInterval
@@ -22,10 +23,43 @@ Add support to postgresql type.
 - DateTime with TimeZone
 - Time
 - Time with TimeZone
-- Multidimentional Array of text: array("first" => "Hello", "last" => "World")
-- Array of INT: array(1, 2, 3, 4, 5, 999)
+- JSON
+- JSONB
+- int[]: ```array(-2147483648, 1, 2, 3, 4, 5, +2147483647)```
+- bigint[]: ```array(-9223372036854775808, 1, 2, 3, 9223372036854775807)```
+- text[]: ```array("Hello", "World")```
+- text[][]: ```array("first" => "Hello", "last" => "World")```
 
+### Supported Functions
 
+Add support of functions.
+
+- CONTAINTS ```SELECT CONTAINTS(ARRAY[1,2,3], 2);```
+- date_trunc ```date_trunc('hour', timestamp '2001-02-16 20:38:40')```
+
+### ManyToAny
+
+Add ManyToAny Annotation
+
+```php
+<?php
+
+use Doctrine\ORM\Mapping as ORM;
+use FLE\Bundle\PostgresqlTypeBundle\Annotation\ManyToAny;
+
+/**
+ * @ORM\Entity
+ */
+class MyEntity
+{
+    /**
+     * @var mixed
+     * @ManyToAny()
+     */
+    protected $mixedEntity;
+    //...
+}
+```
 
 Installation
 ------------

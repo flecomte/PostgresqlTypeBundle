@@ -1,13 +1,13 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Tests;
 
-use FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText;
+use FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 
 class ArrayMultiTextTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ArrayMultiText
+     * @var ArrayAssociativeText
      */
     protected static $arrayMultiTextType;
 
@@ -18,8 +18,8 @@ class ArrayMultiTextTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        ArrayMultiText::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
-        self::$arrayMultiTextType = ArrayMultiText::getType('text[]');
+        ArrayAssociativeText::addType('text[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayMultiText');
+        self::$arrayMultiTextType = ArrayAssociativeText::getType('text[]');
         self::$platform = new PostgreSqlPlatform();
         self::$platform->registerDoctrineTypeMapping('text[]', 'text[]');
     }

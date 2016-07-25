@@ -74,6 +74,11 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('jsonb', 'jsonb');
         }
 
+        if (!Type::hasType('json')) {
+            Type::addType('json', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Json');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('json', 'json');
+        }
+
         if (!Type::hasType('timetz')) {
             Type::addType('timetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\TimeTz');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('timetz', 'timetz');
