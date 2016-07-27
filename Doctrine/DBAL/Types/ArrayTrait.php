@@ -4,16 +4,9 @@ namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class ArrayText extends AbstractType
+trait ArrayTrait
 {
-    const ARRAY_TEXT = 'text[]';
-
-    public function getName ()
-    {
-        return self::ARRAY_TEXT;
-    }
-
-    public function convertToDatabaseValue ($array, AbstractPlatform $platform)
+    public function convertArrayToDatabaseValue (array $array = null, AbstractPlatform $platform)
     {
         if ($array === null) {
             return null;
@@ -28,20 +21,25 @@ class ArrayText extends AbstractType
                 throw new \Exception('This array can not contain more than 1 level deep');
             }
 
-            $convertArray[] = $value;
+            $convertArray[] = parent::convertToDatabaseValue($value, $platform);
         }
 
         return '{'.implode(', ', $convertArray).'}';
     }
 
-    public function convertToPHPValue ($value, AbstractPlatform $platform)
+    public function convertArrayToPHPValue ($array, AbstractPlatform $platform)
     {
-        if ($value === null) {
+        if ($array === null) {
             return null;
         }
-        if ($value === '{}') {
+        if ($array === '{}') {
             return [];
         }
-        return explode(',', mb_substr($value, 1, -1));
+
+        $convertArray = [];
+        foreach (explode(',', mb_substr($array, 1, -1)) as $value) {
+            $convertArray[] = parent::convertToPHPValue($value, $platform);
+        }
+        return $convertArray;
     }
 }

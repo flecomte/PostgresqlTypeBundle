@@ -20,8 +20,10 @@ Add support to postgresql type.
 - Cidr
 - DateInterval
 - DateTime
+- DateTime[]
 - DateTime with TimeZone
 - Time
+- Time[]
 - Time with TimeZone
 - JSON
 - JSONB
@@ -67,8 +69,10 @@ Installation
 Add the bunde to your `composer.json` file:
 
 ```json
-require: {
-    "fle/postgresql-type-bundle": "1.*@dev"
+{
+    "require": {
+        "fle/postgresql-type-bundle": "1.*@dev"
+    }
 }
 ```
 

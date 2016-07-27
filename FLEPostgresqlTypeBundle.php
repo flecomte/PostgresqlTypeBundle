@@ -87,11 +87,31 @@ class FLEPostgresqlTypeBundle extends Bundle
         Type::overrideType('datetime', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTime');
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('datetime', 'datetime');
 
+        if (!Type::hasType('datetime[]')) {
+            Type::addType('datetime[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayDateTime');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('datetime[]', 'datetime[]');
+        }
+
+        if (!Type::hasType('_timestamp')) {
+            Type::addType('_timestamp', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayDateTime');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_timestamp', '_timestamp');
+        }
+
         Type::overrideType('datetimetz', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateTimeTz');
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('datetimetz', 'datetimetz');
 
         Type::overrideType('time', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Time');
         $conn->getDatabasePlatform()->registerDoctrineTypeMapping('time', 'time');
+
+        if (!Type::hasType('time[]')) {
+            Type::addType('time[]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayTime');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('time[]', 'time[]');
+        }
+
+        if (!Type::hasType('_time')) {
+            Type::addType('_time', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayTime');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('_time', '_time');
+        }
 
         if (!Type::hasType('interval')) {
             Type::addType('interval', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateInterval');

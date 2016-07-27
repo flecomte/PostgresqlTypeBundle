@@ -1,39 +1,11 @@
 <?php
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
+use Doctrine\DBAL\Types\TimeType;
 
-class Time extends AbstractType
+class Time extends TimeType
 {
-    const TIME = 'time';
+    use DateTimeTrait;
 
-    public function getName()
-    {
-        return self::TIME;
-    }
-
-    public function convertToDatabaseValue ($value, AbstractPlatform $platform)
-    {
-        return ($value !== null) ? $value->format('H:i:s.u') : null;
-    }
-
-    public function convertToPHPValue ($value, AbstractPlatform $platform)
-    {
-        if ($value === null) {
-            return null;
-        }
-        try {
-            $val = \DateTime::createFromFormat('H:i:s', $value);
-            if ($val === false) {
-                throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s');
-            }
-        } catch (\Exception $e) {
-            $val = \DateTime::createFromFormat('H:i:s.u', $value);
-            if (! $val) {
-                throw ConversionException::conversionFailedFormat($value, $this->getName(), 'H:i:s.u');
-            }
-        }
-        return $val;
-    }
+    protected static $format = 'H:i:s.u';
 }
