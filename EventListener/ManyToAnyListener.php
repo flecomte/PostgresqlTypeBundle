@@ -4,6 +4,7 @@ namespace FLE\Bundle\PostgresqlTypeBundle\EventListener;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\JoinTable;
@@ -43,14 +44,16 @@ class ManyToAnyListener
         }
     }
 
-    private function getJoinTableName ($entity, ManyToAny $annotation, \ReflectionProperty $reflectionProperty)
+    private function getJoinTableName ($entity, ManyToAny $annotation, \ReflectionProperty $reflectionProperty, EntityManager $em)
     {
         if ($annotation->table instanceof JoinTable && ($tableName = $annotation->table->name) !== null) {
             return $annotation->table->name;
         } else {
-            preg_match('`\\\\Entity\\\\(.*)$`', is_object($entity) ? get_class($entity) : $entity, $matches);
-            $className = strtolower($matches[1]);
-            return $className.'_'.$reflectionProperty->name;
+            $namesSpace = $em->getConfiguration()->getEntityNamespaces();
+            $className = is_object($entity) ? get_class($entity) : $entity;
+            $className = str_replace($namesSpace, '', $className);
+            $className = substr($className, 1);
+            return strtolower($className).'_'.$reflectionProperty->name;
         }
     }
 
@@ -63,13 +66,36 @@ class ManyToAnyListener
         });
     }
 
+    protected function getSoftDeletableCacheId ($className)
+    {
+        return $className.'\\$GEDMO_SOFTDELETEABLE_CLASSMETADATA';
+    }
+
+    protected function isSoftDelete ($entity, EntityManager $em)
+    {
+        $softDeletableConfig = $em->getConfiguration()->getMetadataCacheImpl()->fetch($this->getSoftDeletableCacheId(get_class($entity)));
+        if (isset($softDeletableConfig['softDeleteable']) && isset($softDeletableConfig['fieldName']) && $softDeletableConfig['softDeleteable'] === true) {
+            $deleteFieldReflexion = new \ReflectionProperty(get_class($entity), $softDeletableConfig['fieldName']);
+            $deleteFieldReflexion->setAccessible(true);
+            $oldValue = $deleteFieldReflexion->getValue($entity);
+            if ($oldValue === null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function preRemove (LifecycleEventArgs $event)
     {
         $entity = $event->getEntity();
 
-        $this->eachAnnotations($entity, function ($entity, ManyToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event) {
+        $this->eachAnnotations($entity, function ($entity, ManyToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event)
+        {
+            if ($this->isSoftDelete($entity, $event->getEntityManager())) {
+                return; // don't delete
+            }
             $em = $event->getEntityManager();
-            $joinTableName = $this->getJoinTableName($entity, $annotation, $reflectionProperty);
+            $joinTableName = $this->getJoinTableName($entity, $annotation, $reflectionProperty, $em);
 
             $parentClass = get_class($entity);
             $parentId = $this->registry->getManagerForClass($parentClass)->getMetadataFactory()->getMetadataFor($parentClass)->getIdentifierValues($entity);
@@ -84,7 +110,8 @@ class ManyToAnyListener
     public function postPersist (LifecycleEventArgs $event)
     {
         $entity = $event->getEntity();
-        $this->eachAnnotations($entity, function ($entity, ManyToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event) {
+        $this->eachAnnotations($entity, function ($entity, ManyToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event)
+        {
             $con = $event->getEntityManager()->getConnection();
             foreach ($reflectionProperty->getValue($entity) as $relatedEntity) {
                 $relatedClass = ClassUtils::getClass($relatedEntity);
@@ -95,7 +122,7 @@ class ManyToAnyListener
                 if ( ! $relatedId) {
                     throw new \RuntimeException('The identifier for the related entity "'.$relatedClass.'" was empty.');
                 }
-                $tableName = $this->getJoinTableName($entity, $annotation, $reflectionProperty);
+                $tableName = $this->getJoinTableName($entity, $annotation, $reflectionProperty, $event->getEntityManager());
 
                 $con->executeUpdate("INSERT INTO $tableName (parent_id, related_class, related_id) VALUES (:parentId, :relatedClass, :relatedId)", [
                     'parentId'     => $parentId,
@@ -115,9 +142,10 @@ class ManyToAnyListener
     {
         /** @var ClassMetadata $classMetadata */
         foreach ($event->getEntityManager()->getMetadataFactory()->getAllMetadata() as $classMetadata) {
-            $this->eachAnnotations($classMetadata->getReflectionClass()->getName(), function ($className, ManyToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event, $classMetadata) {
+            $this->eachAnnotations($classMetadata->getReflectionClass()->getName(), function ($className, ManyToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event, $classMetadata)
+            {
                 $schema = $event->getSchema();
-                $joinTableName = $this->getJoinTableName($className, $annotation, $reflectionProperty);
+                $joinTableName = $this->getJoinTableName($className, $annotation, $reflectionProperty, $event->getEntityManager());
                 $table = $schema->createTable($joinTableName);
                 $table->addColumn('parent_id', 'jsonb', array('nullable' => false, 'unsigned' => true));
                 $table->addColumn('related_class', 'string', array('nullable' => false, 'length' => '150'));
