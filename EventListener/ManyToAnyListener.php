@@ -123,15 +123,18 @@ class ManyToAnyListener
                     throw new \RuntimeException('The identifier for the related entity "'.$relatedClass.'" was empty.');
                 }
                 $tableName = $this->getJoinTableName($entity, $annotation, $reflectionProperty, $event->getEntityManager());
+                $relatedTableName = $event->getEntityManager()->getClassMetadata($relatedClass)->getTableName();
 
-                $con->executeUpdate("INSERT INTO $tableName (parent_id, related_class, related_id) VALUES (:parentId, :relatedClass, :relatedId)", [
+                $con->executeUpdate("INSERT INTO $tableName (parent_id, related_class, related_table, related_id) VALUES (:parentId, :relatedClass, :relatedTable, :relatedId)", [
                     'parentId'     => $parentId,
                     'relatedClass' => $relatedClass,
+                    'relatedTable' => $relatedTableName,
                     'relatedId'    => $relatedId,
                 ],
                 [
                     'parentId'     => 'jsonb',
                     'relatedClass' => 'string',
+                    'relatedTable' => 'string',
                     'relatedId'    => 'jsonb',
                 ]);
             }
@@ -149,6 +152,7 @@ class ManyToAnyListener
                 $table = $schema->createTable($joinTableName);
                 $table->addColumn('parent_id', 'jsonb', array('nullable' => false, 'unsigned' => true));
                 $table->addColumn('related_class', 'string', array('nullable' => false, 'length' => '150'));
+                $table->addColumn('related_table', 'string', array('nullable' => false, 'length' => '150'));
                 $table->addColumn('related_id', 'jsonb', array('nullable' => false));
                 $table->setPrimaryKey(array('parent_id', 'related_class', 'related_id'));
             });
