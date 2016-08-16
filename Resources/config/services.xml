@@ -6,6 +6,7 @@
 
   <parameters>
     <parameter key="fle_postgresql_type_bundle.entity.many_to_any_listener.class">FLE\Bundle\PostgresqlTypeBundle\EventListener\ManyToAnyListener</parameter>
+    <parameter key="fle_postgresql_type_bundle.entity.one_to_any_listener.class">FLE\Bundle\PostgresqlTypeBundle\EventListener\OneToAnyListener</parameter>
   </parameters>
 
   <services>
@@ -13,6 +14,15 @@
       <argument type="service" id="annotation_reader" />
       <argument type="service" id="doctrine" />
       <tag name="doctrine.event_listener" lazy="true" event="postGenerateSchema" />
+      <tag name="doctrine.event_listener" lazy="true" event="postLoad" />
+      <tag name="doctrine.event_listener" lazy="true" event="postPersist" />
+      <tag name="doctrine.event_listener" lazy="true" event="preRemove" />
+    </service>
+
+    <service id="fle_postgresql_type_bundle.entity.one_to_any_listener" class="%fle_postgresql_type_bundle.entity.one_to_any_listener.class%">
+      <argument type="service" id="annotation_reader" />
+      <argument type="service" id="doctrine" />
+      <tag name="doctrine.event_listener" lazy="true" event="loadClassMetadata" />
       <tag name="doctrine.event_listener" lazy="true" event="postLoad" />
       <tag name="doctrine.event_listener" lazy="true" event="postPersist" />
       <tag name="doctrine.event_listener" lazy="true" event="preRemove" />
