@@ -117,5 +117,10 @@ class FLEPostgresqlTypeBundle extends Bundle
             Type::addType('interval', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\DateInterval');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('interval', 'interval');
         }
+
+        if (!Type::hasType('object_json')) {
+            Type::addType('object_json', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Object');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('object_json', 'json');
+        }
     }
 }
