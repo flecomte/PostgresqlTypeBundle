@@ -17,6 +17,7 @@ Overview
 Add support to postgresql type.
 
 - Box
+- Point
 - Cidr
 - DateInterval
 - DateTime
@@ -91,4 +92,17 @@ $bundles = array(
     new FLE\Bundle\PostgresqlTypeBundle\FLEPostgresqlTypeBundle(),
     // ...
 );
+```
+
+Usage
+-----
+
+### Point
+
+To use Point twig template:
+
+```yaml
+twig:
+    form_themes:
+        - 'FLEPostgresqlTypeBundle::Form/point_type_bootstrap3.html.twig'
 ```

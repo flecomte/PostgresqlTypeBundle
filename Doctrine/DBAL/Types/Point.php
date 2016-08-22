@@ -2,6 +2,7 @@
 namespace FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use FLE\Bundle\PostgresqlTypeBundle\Object\Point as ObjectPoint;
 
 class Point extends AbstractType
 {
@@ -24,7 +25,12 @@ class Point extends AbstractType
         if ($value === null) {
             return null;
         }
-        if (is_array($value)) {
+        if ($value instanceof ObjectPoint) {
+            if ($value->getX() === null || $value->getY() === null) {
+                return null;
+            }
+            return $value->getX().','.$value->getY();
+        } elseif (is_array($value)) {
             if (empty($value)) {
                 return null;
             } elseif (count($value) == 2) {
@@ -66,10 +72,8 @@ class Point extends AbstractType
         if (!is_string($value)) {
             throw new \Exception('PointType Error.');
         }
-        if (preg_match('`\((-?[0-9.]+),(-?[0-9.]+)\)`', $value, $matches)) {
-            $reordered = array('x' => $matches[1], 'y' => $matches[2]);
-
-            return $reordered;
+        if (sscanf($value, '(%f,%f)', $x, $y)) {
+            return new ObjectPoint($x, $y);
         } else {
             throw new \Exception('PointType Error. Value:'.$value);
         }
