@@ -29,6 +29,11 @@ class FLEPostgresqlTypeBundle extends Bundle
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('box', 'box');
         }
 
+        if (!Type::hasType('point')) {
+            Type::addType('point', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\Point');
+            $conn->getDatabasePlatform()->registerDoctrineTypeMapping('point', 'point');
+        }
+
         if (!Type::hasType('text[][]')) {
             Type::addType('text[][]', 'FLE\Bundle\PostgresqlTypeBundle\Doctrine\DBAL\Types\ArrayAssociativeText');
             $conn->getDatabasePlatform()->registerDoctrineTypeMapping('text[][]', 'text[][]');
