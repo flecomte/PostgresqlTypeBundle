@@ -51,7 +51,7 @@ class OneToAnyListener
             $em = $this->registry->getManagerForClass(get_class($entity));
 
             $reference = $reflectionProperty->getValue($entity);
-            if ($reference !== null) {
+            if ($reference !== null && !empty($reference)) {
                 $ids = $reference['ids'];
                 $table = $reference['table'];
                 $className = $this->getClassNameFromTableName($table);
@@ -77,6 +77,8 @@ class OneToAnyListener
                 $object = $qb->getQuery()->getOneOrNullResult();
 
                 $reflectionProperty->setValue($entity, $object);
+            } else {
+                $reflectionProperty->setValue($entity, null);
             }
         });
     }
@@ -129,13 +131,18 @@ class OneToAnyListener
         });
     }
 
+    public function postUpdate (LifecycleEventArgs $event)
+    {
+        $this->postPersist($event);
+    }
+
     public function postPersist (LifecycleEventArgs $event)
     {
         $entity = $event->getEntity();
         $this->eachAnnotations($entity, function ($entity, OneToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event)
         {
             $object = $reflectionProperty->getValue($entity);
-            if ($object === null) {
+            if ($object === null || !is_object($object)) {
                 return;
             }
 
