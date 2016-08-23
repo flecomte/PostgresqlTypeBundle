@@ -1,0 +1,8 @@
+{% block point_widget %}
+    <div class="input-group">
+        {{ form_label(form.x, null, {'label_attr': {'class':'input-group-addon'}, horizontal_label_class:''}) }}
+        {{ form_widget(form.x) }}
+        {{ form_label(form.y, null, {'label_attr': {'class':'input-group-addon'}, horizontal_label_class:''}) }}
+        {{ form_widget(form.y) }}
+    </div>
+{% endblock point_widget %}
