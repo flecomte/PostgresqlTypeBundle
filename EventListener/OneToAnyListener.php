@@ -6,7 +6,8 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Event\OnFlushEventArgs;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use FLE\Bundle\PostgresqlTypeBundle\Annotation\OneToAny;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -131,39 +132,39 @@ class OneToAnyListener
         });
     }
 
-    public function postUpdate (LifecycleEventArgs $event)
+    public function onFlush (OnFlushEventArgs $event)
     {
-        $this->postPersist($event);
-    }
+        $entities = array_merge(
+            $event->getEntityManager()->getUnitOfWork()->getScheduledEntityInsertions(),
+            $event->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates()
+        );
+        foreach ($entities as $entity) {
+            $this->eachAnnotations($entity, function ($entity, OneToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event)
+            {
+                $unitOfWork = $event->getEntityManager()->getUnitOfWork();
 
-    public function postPersist (LifecycleEventArgs $event)
-    {
-        $entity = $event->getEntity();
-        $this->eachAnnotations($entity, function ($entity, OneToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event)
-        {
-            $object = $reflectionProperty->getValue($entity);
-            if ($object === null || !is_object($object)) {
-                return;
-            }
+                $object = $reflectionProperty->getValue($entity);
+                if ($object === null || !is_object($object)) {
+                    return;
+                }
 
-            $event->getEntityManager()->beginTransaction();
+                if (in_array('persist', $annotation->cascade)) {
+                    $event->getEntityManager()->persist($object);
+                }
 
-            if (in_array('persist', $annotation->cascade)) {
-                $event->getEntityManager()->persist($object);
-                $event->getEntityManager()->flush($object);
-            }
+                /** @var ClassMetadata $objectMetadata */
+                $objectMetadata = $event->getEntityManager()->getMetadataFactory()->getMetadataFor(get_class($object));
+                $ids = $objectMetadata->getIdentifierValues($object);
+                $relatedTableName = $objectMetadata->getTableName();
+                $value = ['ids' => $ids, 'table' => $relatedTableName];
 
-            /** @var ClassMetadataInfo $metadata */
-            $metadata = $event->getEntityManager()->getMetadataFactory()->getMetadataFor(get_class($object));
-            $ids = $metadata->getIdentifierValues($object);
-            $relatedTableName = $metadata->getTableName();
-            $value = ['ids' => $ids, 'table' => $relatedTableName];
-            $metadata->reflFields[$reflectionProperty->getName()] = $reflectionProperty;
-            $metadata->setFieldValue($entity, $reflectionProperty->getName(), $value);
-            $event->getEntityManager()->persist($entity);
-            $event->getEntityManager()->flush($entity);
-            $event->getEntityManager()->commit();
-        });
+                /** @var ClassMetadata $metadata */
+                $reflectionProperty->setValue($entity, $value);
+                $event->getEntityManager()->persist($entity);
+                $metadata = $event->getEntityManager()->getMetadataFactory()->getMetadataFor(get_class($entity));
+                $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
+            });
+        }
     }
 
     public function loadClassMetadata(LoadClassMetadataEventArgs $event)
