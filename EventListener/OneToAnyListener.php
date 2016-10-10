@@ -45,8 +45,12 @@ class OneToAnyListener
     public function postLoad (LifecycleEventArgs $event)
     {
         $entity = $event->getEntity();
+        $this->arrayToObject($entity);
+    }
 
-        $this->eachAnnotations($entity, function ($entity, OneToAny $annotation, \ReflectionProperty $reflectionProperty) use ($event)
+    protected function arrayToObject($entity)
+    {
+        $this->eachAnnotations($entity, function ($entity, OneToAny $annotation, \ReflectionProperty $reflectionProperty)
         {
             /** @var EntityManager $em */
             $em = $this->registry->getManagerForClass(get_class($entity));
@@ -164,6 +168,10 @@ class OneToAnyListener
                 $metadata = $event->getEntityManager()->getMetadataFactory()->getMetadataFor(get_class($entity));
                 $unitOfWork->recomputeSingleEntityChangeSet($metadata, $entity);
             });
+        }
+
+        foreach ($entities as $entity) {
+            $this->arrayToObject($entity);
         }
     }
 
